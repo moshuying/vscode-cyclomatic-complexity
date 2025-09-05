@@ -1,0 +1,10 @@
+{
+  "cyclomatic-complexity.updateComplexity.title": "全量更新圈复杂度",
+  "cyclomatic-complexity.updateFolderComplexity.title": "递归更新文件夹圈复杂度",
+  "cyclomatic-complexity.refresh.title": "刷新视图",
+  "cyclomatic-complexity.openFile.title": "打开文件",
+  "cyclomatic-complexity.view.title": "代码圈复杂度",
+  "cyclomatic-complexity.view.name": "圈复杂度分析",
+  "cyclomatic-complexity.configuration.title": "圈复杂度分析配置",
+  "cyclomatic-complexity.configuration.excludeFolders.description": "扫描时要跳过的文件夹列表（支持glob模式，如*.log）"
+}

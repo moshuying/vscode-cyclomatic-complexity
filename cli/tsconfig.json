@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "ES2020",
+    "outDir": "../out/cli",
+    "lib": [
+      "ES2020"
+    ],
+    "sourceMap": true,
+    "rootDir": ".",
+    "strict": true
+  },
+  "include": [
+    "**/*"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}

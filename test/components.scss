@@ -1,0 +1,510 @@
+// SCSS样式表示例 - 高复杂度
+// 包含混入、函数、循环、条件等高级特性
+
+// 变量定义
+$primary-color: #3498db;
+$secondary-color: #2ecc71;
+$danger-color: #e74c3c;
+$warning-color: #f39c12;
+$info-color: #9b59b6;
+
+$font-sizes: (
+  small: 12px,
+  medium: 16px,
+  large: 20px,
+  xlarge: 24px
+);
+
+$breakpoints: (
+  mobile: 480px,
+  tablet: 768px,
+  desktop: 1024px,
+  large: 1200px
+);
+
+$grid-columns: 12;
+$grid-gutter: 1rem;
+
+// 混入定义 - 中等复杂度
+@mixin button-style($bg-color, $text-color: white, $hover-darken: 10%) {
+  background-color: $bg-color;
+  color: $text-color;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background-color: darken($bg-color, $hover-darken);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+
+  &:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+
+  &:disabled {
+    background-color: lighten($bg-color, 30%);
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
+}
+
+// 复杂混入 - 高复杂度
+@mixin responsive-grid($columns, $gutter: $grid-gutter, $breakpoint-key: null) {
+  display: grid;
+  gap: $gutter;
+
+  @if $breakpoint-key {
+    @include respond-to($breakpoint-key) {
+      grid-template-columns: repeat($columns, 1fr);
+    }
+  }
+
+  @else {
+    grid-template-columns: repeat($columns, 1fr);
+  }
+
+  // 嵌套选择器
+  .grid-item {
+    min-height: 100px;
+
+    &--span-2 {
+      grid-column: span 2;
+    }
+
+    &--span-3 {
+      grid-column: span 3;
+    }
+
+    @for $i from 1 through $columns {
+      &--col-#{$i} {
+        grid-column: span $i;
+      }
+    }
+  }
+}
+
+// 媒体查询混入 - 中等复杂度
+@mixin respond-to($breakpoint) {
+  @if map-has-key($breakpoints, $breakpoint) {
+    $value: map-get($breakpoints, $breakpoint);
+
+    @if $breakpoint ==mobile {
+      @media screen and (max-width: #{$value - 1px}) {
+        @content;
+      }
+    }
+
+    @else {
+      @media screen and (min-width: #{$value}) {
+        @content;
+      }
+    }
+  }
+
+  @else {
+    @warn "Unknown breakpoint: #{$breakpoint}";
+  }
+}
+
+// 复杂函数 - 高复杂度
+@function calculate-spacing($base: 1rem, $multiplier: 1, $unit: rem) {
+  $result: $base * $multiplier;
+
+  @if $unit ==px {
+    @return strip-unit($result) * 16px;
+  }
+
+  @else if $unit ==em {
+    @return strip-unit($result) * 1em;
+  }
+
+  @else {
+    @return $result;
+  }
+}
+
+@function strip-unit($number) {
+  @if type-of($number)=='number' and not unitless($number) {
+    @return $number / ($number * 0 + 1);
+  }
+
+  @return $number;
+}
+
+@function theme-color($key) {
+  $colors: (
+    primary: $primary-color,
+    secondary: $secondary-color,
+    danger: $danger-color,
+    warning: $warning-color,
+    info: $info-color
+  );
+
+@if map-has-key($colors, $key) {
+  @return map-get($colors, $key);
+}
+
+@else {
+  @warn "Unknown color key: #{$key}";
+  @return $primary-color;
+}
+}
+
+// 组件样式 - 高复杂度
+.button {
+  @include button-style($primary-color);
+
+  // 变体样式
+  &--secondary {
+    @include button-style($secondary-color);
+  }
+
+  &--danger {
+    @include button-style($danger-color);
+  }
+
+  &--warning {
+    @include button-style($warning-color, #333);
+  }
+
+  &--info {
+    @include button-style($info-color);
+  }
+
+  // 尺寸变体
+  &--small {
+    padding: 0.25rem 0.5rem;
+    font-size: map-get($font-sizes, small);
+  }
+
+  &--large {
+    padding: 0.75rem 1.5rem;
+    font-size: map-get($font-sizes, large);
+  }
+
+  // 响应式样式
+  @include respond-to(mobile) {
+    width: 100%;
+    margin-bottom: 0.5rem;
+  }
+
+  @include respond-to(tablet) {
+    display: inline-block;
+    width: auto;
+    margin-right: 0.5rem;
+  }
+}
+
+// 卡片组件 - 高复杂度
+.card {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  }
+
+  &__header {
+    padding: calculate-spacing(1, 1.5);
+    background: linear-gradient(135deg, $primary-color, darken($primary-color, 10%));
+    color: white;
+
+    h3 {
+      margin: 0;
+      font-size: map-get($font-sizes, large);
+    }
+  }
+
+  &__body {
+    padding: calculate-spacing(1, 2);
+
+    p {
+      margin-bottom: calculate-spacing(1, 1);
+      line-height: 1.6;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+
+  &__footer {
+    padding: calculate-spacing(1, 1);
+    background: #f8f9fa;
+    border-top: 1px solid #e9ecef;
+
+    .button {
+      margin-right: 0.5rem;
+
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+  }
+
+  // 卡片变体
+  &--success {
+    border-left: 4px solid $secondary-color;
+
+    .card__header {
+      background: linear-gradient(135deg, $secondary-color, darken($secondary-color, 10%));
+    }
+  }
+
+  &--danger {
+    border-left: 4px solid $danger-color;
+
+    .card__header {
+      background: linear-gradient(135deg, $danger-color, darken($danger-color, 10%));
+    }
+  }
+
+  &--warning {
+    border-left: 4px solid $warning-color;
+
+    .card__header {
+      background: linear-gradient(135deg, $warning-color, darken($warning-color, 10%));
+      color: #333;
+    }
+  }
+}
+
+// 网格系统 - 高复杂度
+.grid {
+  @include responsive-grid(1, $grid-gutter, mobile);
+  @include responsive-grid(2, $grid-gutter, tablet);
+  @include responsive-grid(3, $grid-gutter, desktop);
+  @include responsive-grid(4, $grid-gutter, large);
+
+  &--2-col {
+    @include responsive-grid(2);
+  }
+
+  &--3-col {
+    @include responsive-grid(3);
+  }
+
+  &--4-col {
+    @include responsive-grid(4);
+  }
+}
+
+// 表单组件 - 高复杂度
+.form {
+  &__group {
+    margin-bottom: calculate-spacing(1, 1.5);
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  &__label {
+    display: block;
+    margin-bottom: calculate-spacing(1, 0.5);
+    font-weight: 600;
+    color: #333;
+
+    &--required {
+      &::after {
+        content: "*";
+        color: $danger-color;
+        margin-left: 0.25rem;
+      }
+    }
+  }
+
+  &__input {
+    width: 100%;
+    padding: calculate-spacing(1, 0.75);
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: map-get($font-sizes, medium);
+    transition: all 0.3s ease;
+
+    &:focus {
+      outline: none;
+      border-color: $primary-color;
+      box-shadow: 0 0 0 3px rgba(theme-color(primary), 0.1);
+    }
+
+    &:invalid {
+      border-color: $danger-color;
+
+      &:focus {
+        box-shadow: 0 0 0 3px rgba(theme-color(danger), 0.1);
+      }
+    }
+
+    &:valid {
+      border-color: $secondary-color;
+
+      &:focus {
+        box-shadow: 0 0 0 3px rgba(theme-color(secondary), 0.1);
+      }
+    }
+
+    &[disabled] {
+      background-color: #f8f9fa;
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+  }
+
+  &__error {
+    color: $danger-color;
+    font-size: map-get($font-sizes, small);
+    margin-top: calculate-spacing(1, 0.25);
+    display: block;
+  }
+
+  &__help {
+    color: #6c757d;
+    font-size: map-get($font-sizes, small);
+    margin-top: calculate-spacing(1, 0.25);
+  }
+}
+
+// 循环生成工具类 - 高复杂度
+@each $name, $color in (primary: $primary-color, secondary: $secondary-color, danger: $danger-color, warning: $warning-color, info: $info-color) {
+  .text-#{$name} {
+    color: $color;
+  }
+
+  .bg-#{$name} {
+    background-color: $color;
+  }
+
+  .border-#{$name} {
+    border-color: $color;
+  }
+}
+
+@for $i from 1 through 5 {
+  .spacing-#{$i} {
+    padding: calculate-spacing(1, $i);
+  }
+
+  .margin-#{$i} {
+    margin: calculate-spacing(1, $i);
+  }
+}
+
+// 条件逻辑 - 中等复杂度
+$theme: 'light' !default;
+
+@if $theme =='dark' {
+  $primary-color: #1a1a1a;
+  $secondary-color: #333;
+
+  body {
+    background-color: $primary-color;
+    color: white;
+  }
+}
+
+@else {
+  body {
+    background-color: white;
+    color: #333;
+  }
+}
+
+// 高级嵌套 - 高复杂度
+.navigation {
+  background: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+  .nav {
+    list-style: none;
+    display: flex;
+    margin: 0;
+    padding: 0;
+
+    &__item {
+      position: relative;
+
+      &:hover {
+        .nav__submenu {
+          opacity: 1;
+          visibility: visible;
+          transform: translateY(0);
+        }
+      }
+
+      &--active {
+        .nav__link {
+          color: $primary-color;
+
+          &::after {
+            width: 100%;
+          }
+        }
+      }
+    }
+
+    &__link {
+      display: block;
+      padding: calculate-spacing(1, 1) calculate-spacing(1, 1.5);
+      color: #333;
+      text-decoration: none;
+      position: relative;
+      transition: all 0.3s ease;
+
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        width: 0;
+        height: 2px;
+        background: $primary-color;
+        transition: all 0.3s ease;
+        transform: translateX(-50%);
+      }
+
+      &:hover {
+        color: $primary-color;
+
+        &::after {
+          width: 80%;
+        }
+      }
+    }
+
+    &__submenu {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      background: white;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-10px);
+      transition: all 0.3s ease;
+      min-width: 200px;
+      z-index: 1000;
+
+      .nav__item {
+        .nav__link {
+          padding: calculate-spacing(1, 0.75) calculate-spacing(1, 1);
+          border-bottom: 1px solid #f8f9fa;
+
+          &:last-child {
+            border-bottom: none;
+          }
+        }
+      }
+    }
+  }
+}

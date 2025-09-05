@@ -1,0 +1,272 @@
+/* CSS样式表示例 - 中等复杂度 */
+
+/* 基础样式 - 低复杂度 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: #f8f9fa;
+}
+
+/* 复杂选择器示例 - 中等复杂度 */
+.container > .header + .content ~ .sidebar:nth-child(odd) {
+    background-color: #e9ecef;
+    border-left: 3px solid #007bff;
+}
+
+/* 复杂的表单样式 - 高复杂度 */
+form input[type="text"]:not([disabled]):focus:valid,
+form input[type="email"]:not([disabled]):focus:valid,
+form input[type="password"]:not([disabled]):focus:valid {
+    border-color: #28a745;
+    box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+    outline: none;
+}
+
+form input[type="text"]:not([disabled]):focus:invalid,
+form input[type="email"]:not([disabled]):focus:invalid,
+form input[type="password"]:not([disabled]):focus:invalid {
+    border-color: #dc3545;
+    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+    outline: none;
+}
+
+/* 伪类和伪元素 - 中等复杂度 */
+.btn::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.3) 50%, transparent 70%);
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+}
+
+.btn:hover::before {
+    transform: translateX(100%);
+}
+
+.btn:nth-child(2n+1):hover {
+    background-color: #0056b3;
+}
+
+.btn:nth-child(3n):active {
+    transform: scale(0.95);
+}
+
+/* 媒体查询 - 中等复杂度 */
+@media screen and (max-width: 768px) {
+    .container {
+        flex-direction: column;
+    }
+    
+    .sidebar {
+        order: -1;
+    }
+    
+    .header > .nav > .nav-item:not(:last-child) {
+        margin-bottom: 10px;
+    }
+}
+
+@media screen and (min-width: 769px) and (max-width: 1024px) {
+    .grid-container {
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+    }
+    
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    }
+}
+
+@media print {
+    .no-print, .sidebar, .header .nav {
+        display: none !important;
+    }
+    
+    .content {
+        width: 100% !important;
+        margin: 0 !important;
+    }
+}
+
+/* 复杂的网格布局 - 高复杂度 */
+.dashboard {
+    display: grid;
+    grid-template-areas: 
+        "header header header"
+        "sidebar main aside"
+        "footer footer footer";
+    grid-template-rows: auto 1fr auto;
+    grid-template-columns: 250px 1fr 200px;
+    min-height: 100vh;
+    gap: 1rem;
+}
+
+.dashboard > .header { grid-area: header; }
+.dashboard > .sidebar { grid-area: sidebar; }
+.dashboard > .main { grid-area: main; }
+.dashboard > .aside { grid-area: aside; }
+.dashboard > .footer { grid-area: footer; }
+
+/* 复杂动画 - 高复杂度 */
+@keyframes complexAnimation {
+    0% {
+        transform: translateX(-100%) rotate(0deg) scale(0.5);
+        opacity: 0;
+        filter: blur(5px);
+    }
+    25% {
+        transform: translateX(-50%) rotate(90deg) scale(0.75);
+        opacity: 0.5;
+        filter: blur(3px);
+    }
+    50% {
+        transform: translateX(0) rotate(180deg) scale(1);
+        opacity: 0.8;
+        filter: blur(1px);
+    }
+    75% {
+        transform: translateX(25px) rotate(270deg) scale(1.1);
+        opacity: 0.9;
+        filter: blur(0px);
+    }
+    100% {
+        transform: translateX(0) rotate(360deg) scale(1);
+        opacity: 1;
+        filter: blur(0px);
+    }
+}
+
+.animated-element {
+    animation: complexAnimation 2s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
+}
+
+.animated-element:hover {
+    animation-play-state: paused;
+}
+
+.animated-element:nth-child(even) {
+    animation-delay: 0.5s;
+    animation-direction: reverse;
+}
+
+/* 复杂的flex布局 - 中等复杂度 */
+.flex-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-start;
+    align-content: stretch;
+}
+
+.flex-container > .flex-item:first-child {
+    flex: 2 1 300px;
+    align-self: stretch;
+}
+
+.flex-container > .flex-item:nth-child(2n) {
+    flex: 1 1 200px;
+    align-self: flex-end;
+}
+
+.flex-container > .flex-item:last-child {
+    flex: 1 0 150px;
+    align-self: center;
+}
+
+/* 深度嵌套选择器 - 高复杂度 */
+.article .content .section .subsection .paragraph .highlight {
+    background-color: yellow;
+    font-weight: bold;
+}
+
+.navigation > ul > li > a:hover > span::after {
+    content: "→";
+    margin-left: 5px;
+    color: #007bff;
+}
+
+.table tbody tr:nth-child(odd) td:first-child:hover ~ td {
+    background-color: #f8f9fa;
+}
+
+/* CSS变量和计算 - 中等复杂度 */
+:root {
+    --primary-color: #007bff;
+    --secondary-color: #6c757d;
+    --success-color: #28a745;
+    --danger-color: #dc3545;
+    --warning-color: #ffc107;
+    --info-color: #17a2b8;
+    --spacing-unit: 1rem;
+    --border-radius: 0.25rem;
+}
+
+.theme-primary {
+    background-color: var(--primary-color);
+    border: 1px solid color-mix(in srgb, var(--primary-color) 80%, black);
+    padding: calc(var(--spacing-unit) * 2);
+    border-radius: calc(var(--border-radius) * 2);
+}
+
+.theme-secondary {
+    background-color: var(--secondary-color);
+    border: 1px solid color-mix(in srgb, var(--secondary-color) 80%, black);
+    padding: calc(var(--spacing-unit) / 2);
+    border-radius: var(--border-radius);
+}
+
+/* 支持查询 - 中等复杂度 */
+@supports (display: grid) {
+    .grid-layout {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    }
+}
+
+@supports not (display: grid) {
+    .grid-layout {
+        display: flex;
+        flex-wrap: wrap;
+    }
+    
+    .grid-layout > * {
+        flex: 1 1 200px;
+    }
+}
+
+@supports (backdrop-filter: blur(10px)) {
+    .glass-effect {
+        backdrop-filter: blur(10px);
+        background-color: rgba(255, 255, 255, 0.8);
+    }
+}
+
+/* 容器查询（新特性） - 中等复杂度 */
+@container (min-width: 400px) {
+    .card {
+        display: flex;
+        flex-direction: row;
+    }
+    
+    .card .image {
+        flex: 0 0 150px;
+    }
+    
+    .card .content {
+        flex: 1;
+        padding-left: 1rem;
+    }
+}
+

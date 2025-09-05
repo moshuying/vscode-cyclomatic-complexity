@@ -1,0 +1,660 @@
+// Stylus样式表示例 - 高复杂度
+// 展示Stylus独特的语法特性
+
+// 变量定义（无需$符号）
+primary-color = #3498db
+secondary-color = #2ecc71
+danger-color = #e74c3c
+warning-color = #f39c12
+success-color = #27ae60
+info-color = #8e44ad
+
+// 字体设置
+font-primary = "Helvetica Neue", Arial, sans-serif
+font-monospace = "Courier New", monospace
+
+// 尺寸变量
+base-size = 16px
+line-height = 1.6
+border-radius = 4px
+transition-speed = 0.3s
+
+// 断点设置
+mobile-max = 767px
+tablet-min = 768px
+tablet-max = 1023px
+desktop-min = 1024px
+
+// 混入定义 - 中等复杂度
+transition(property = all, duration = transition-speed, easing = ease)
+  transition property duration easing
+
+border-radius(radius = border-radius)
+  border-radius radius
+
+box-shadow(shadow)
+  box-shadow shadow
+
+// 复杂混入 - 高复杂度
+button-variant(bg-color, text-color = white, hover-darken = 10%)
+  background-color bg-color
+  color text-color
+  border 1px solid bg-color
+  transition()
+  
+  &:hover
+    background-color darken(bg-color, hover-darken)
+    border-color darken(bg-color, hover-darken + 5%)
+    transform translateY(-2px)
+    box-shadow(0 4px 12px rgba(0, 0, 0, 0.15))
+  
+  &:active
+    transform translateY(0)
+    box-shadow(0 2px 6px rgba(0, 0, 0, 0.2))
+  
+  &:disabled
+    background-color lighten(bg-color, 30%)
+    border-color lighten(bg-color, 30%)
+    cursor not-allowed
+    transform none
+    box-shadow none
+
+// 响应式混入 - 中等复杂度
+mobile()
+  @media screen and (max-width mobile-max)
+    {block}
+
+tablet()
+  @media screen and (min-width tablet-min) and (max-width tablet-max)
+    {block}
+
+desktop()
+  @media screen and (min-width desktop-min)
+    {block}
+
+// 网格系统混入 - 高复杂度
+make-container(gutter = 30px)
+  width 100%
+  padding-left (gutter / 2)
+  padding-right (gutter / 2)
+  margin-left auto
+  margin-right auto
+
+make-row(gutter = 30px)
+  display flex
+  flex-wrap wrap
+  margin-left -(gutter / 2)
+  margin-right -(gutter / 2)
+
+make-col(size, columns = 12)
+  flex 0 0 unit((size / columns * 100), '%')
+  max-width unit((size / columns * 100), '%')
+  padding-left 15px
+  padding-right 15px
+
+// 基础样式重置
+*
+  margin 0
+  padding 0
+  box-sizing border-box
+
+body
+  font-family font-primary
+  font-size base-size
+  line-height line-height
+  color #333
+  background-color #f8f9fa
+
+// 容器和网格系统 - 高复杂度
+.container
+  make-container()
+  
+  +mobile()
+    max-width 100%
+    padding-left 10px
+    padding-right 10px
+  
+  +tablet()
+    max-width 750px
+  
+  +desktop()
+    max-width 1140px
+
+.row
+  make-row()
+
+// 生成网格列 - 循环逻辑
+for i in 1..12
+  .col-{i}
+    make-col(i)
+  
+  +tablet()
+    .col-md-{i}
+      make-col(i)
+  
+  +desktop()
+    .col-lg-{i}
+      make-col(i)
+
+// 按钮组件 - 高复杂度
+.btn
+  display inline-block
+  padding 12px 24px
+  font-size base-size
+  line-height 1
+  text-align center
+  text-decoration none
+  border none
+  border-radius()
+  cursor pointer
+  transition()
+  user-select none
+  
+  &:focus
+    outline none
+    box-shadow(0 0 0 3px rgba(primary-color, 0.25))
+  
+  // 按钮尺寸变体
+  &--small
+    padding 8px 16px
+    font-size (base-size * 0.875)
+  
+  &--large
+    padding 16px 32px
+    font-size (base-size * 1.125)
+  
+  &--block
+    display block
+    width 100%
+  
+  // 按钮样式变体
+  &--primary
+    button-variant(primary-color)
+  
+  &--secondary
+    button-variant(secondary-color)
+  
+  &--success
+    button-variant(success-color)
+  
+  &--danger
+    button-variant(danger-color)
+  
+  &--warning
+    button-variant(warning-color, #333)
+  
+  &--info
+    button-variant(info-color)
+  
+  // 轮廓按钮
+  &--outline-primary
+    background-color transparent
+    color primary-color
+    border 2px solid primary-color
+    
+    &:hover
+      background-color primary-color
+      color white
+  
+  &--outline-secondary
+    background-color transparent
+    color secondary-color
+    border 2px solid secondary-color
+    
+    &:hover
+      background-color secondary-color
+      color white
+
+// 卡片组件 - 高复杂度
+.card
+  background white
+  border 1px solid #e9ecef
+  border-radius()
+  box-shadow(0 2px 4px rgba(0, 0, 0, 0.1))
+  overflow hidden
+  transition()
+  
+  &:hover
+    transform translateY(-5px)
+    box-shadow(0 8px 20px rgba(0, 0, 0, 0.15))
+  
+  &__header
+    padding 20px
+    background linear-gradient(135deg, primary-color, darken(primary-color, 10%))
+    color white
+    
+    h1, h2, h3, h4, h5, h6
+      margin 0
+      color white
+  
+  &__body
+    padding 20px
+    
+    p
+      margin-bottom 15px
+      
+      &:last-child
+        margin-bottom 0
+  
+  &__footer
+    padding 15px 20px
+    background #f8f9fa
+    border-top 1px solid #e9ecef
+  
+  // 卡片变体
+  &--success
+    border-left 4px solid success-color
+    
+    .card__header
+      background linear-gradient(135deg, success-color, darken(success-color, 10%))
+  
+  &--danger
+    border-left 4px solid danger-color
+    
+    .card__header
+      background linear-gradient(135deg, danger-color, darken(danger-color, 10%))
+  
+  &--warning
+    border-left 4px solid warning-color
+    
+    .card__header
+      background linear-gradient(135deg, warning-color, darken(warning-color, 10%))
+      color #333
+
+// 表单组件 - 高复杂度
+.form
+  &__group
+    margin-bottom 20px
+    
+    &:last-child
+      margin-bottom 0
+  
+  &__label
+    display block
+    margin-bottom 8px
+    font-weight 600
+    color #333
+    
+    &--required::after
+      content "*"
+      color danger-color
+      margin-left 4px
+  
+  &__input
+    width 100%
+    padding 12px 16px
+    font-size base-size
+    line-height 1.5
+    color #495057
+    background white
+    border 1px solid #ced4da
+    border-radius()
+    transition(border-color)
+    
+    &:focus
+      outline none
+      border-color primary-color
+      box-shadow(0 0 0 3px rgba(primary-color, 0.1))
+    
+    &:invalid
+      border-color danger-color
+      
+      &:focus
+        box-shadow(0 0 0 3px rgba(danger-color, 0.1))
+    
+    &:valid
+      border-color success-color
+      
+      &:focus
+        box-shadow(0 0 0 3px rgba(success-color, 0.1))
+    
+    &[disabled]
+      background #e9ecef
+      opacity 0.6
+      cursor not-allowed
+  
+  &__textarea
+    @extend .form__input
+    min-height 120px
+    resize vertical
+  
+  &__select
+    @extend .form__input
+    cursor pointer
+    
+    option
+      padding 8px
+  
+  &__error
+    display block
+    margin-top 5px
+    font-size (base-size * 0.875)
+    color danger-color
+  
+  &__help
+    display block
+    margin-top 5px
+    font-size (base-size * 0.875)
+    color #6c757d
+
+// 导航栏组件 - 高复杂度
+.navbar
+  display flex
+  align-items center
+  justify-content space-between
+  padding 1rem 2rem
+  background white
+  box-shadow(0 2px 4px rgba(0, 0, 0, 0.1))
+  
+  +mobile()
+    flex-direction column
+    padding 1rem
+  
+  &__brand
+    font-size (base-size * 1.25)
+    font-weight bold
+    text-decoration none
+    color primary-color
+    
+    &:hover
+      color darken(primary-color, 10%)
+  
+  &__nav
+    display flex
+    list-style none
+    margin 0
+    padding 0
+    
+    +mobile()
+      flex-direction column
+      width 100%
+      margin-top 1rem
+  
+  &__item
+    margin-left 2rem
+    
+    +mobile()
+      margin-left 0
+      margin-bottom 0.5rem
+      
+      &:last-child
+        margin-bottom 0
+  
+  &__link
+    text-decoration none
+    color #333
+    font-weight 500
+    transition()
+    position relative
+    
+    &::after
+      content ""
+      position absolute
+      bottom -5px
+      left 50%
+      width 0
+      height 2px
+      background primary-color
+      transition(width 0.3s ease, left 0.3s ease)
+    
+    &:hover
+      color primary-color
+      
+      &::after
+        width 100%
+        left 0
+    
+    &--active
+      color primary-color
+      
+      &::after
+        width 100%
+        left 0
+
+// 模态框组件 - 高复杂度
+.modal
+  position fixed
+  top 0
+  left 0
+  width 100%
+  height 100%
+  background rgba(0, 0, 0, 0.5)
+  display flex
+  align-items center
+  justify-content center
+  z-index 1000
+  opacity 0
+  visibility hidden
+  transition(opacity 0.3s ease, visibility 0.3s ease)
+  
+  &--show
+    opacity 1
+    visibility visible
+    
+    .modal__content
+      transform scale(1)
+  
+  &__content
+    background white
+    border-radius()
+    max-width 90%
+    max-height 90%
+    overflow-y auto
+    transform scale(0.7)
+    transition(transform 0.3s ease)
+    
+    +mobile()
+      max-width 95%
+      max-height 95%
+  
+  &__header
+    display flex
+    align-items center
+    justify-content space-between
+    padding 1.5rem
+    border-bottom 1px solid #e9ecef
+  
+  &__title
+    margin 0
+    font-size (base-size * 1.25)
+    color #333
+  
+  &__close
+    background none
+    border none
+    font-size (base-size * 1.5)
+    cursor pointer
+    color #999
+    transition()
+    
+    &:hover
+      color #333
+  
+  &__body
+    padding 1.5rem
+  
+  &__footer
+    display flex
+    justify-content flex-end
+    gap 1rem
+    padding 1rem 1.5rem
+    border-top 1px solid #e9ecef
+
+// 工具类生成 - 中等复杂度
+colors = {
+  'primary': primary-color,
+  'secondary': secondary-color,
+  'success': success-color,
+  'danger': danger-color,
+  'warning': warning-color,
+  'info': info-color
+}
+
+for name, color in colors
+  .text-{name}
+    color color
+  
+  .bg-{name}
+    background-color color
+  
+  .border-{name}
+    border-color color
+
+// 间距工具类
+for i in 0..5
+  .m-{i}
+    margin unit(i * 8, px)
+  
+  .mt-{i}
+    margin-top unit(i * 8, px)
+  
+  .mr-{i}
+    margin-right unit(i * 8, px)
+  
+  .mb-{i}
+    margin-bottom unit(i * 8, px)
+  
+  .ml-{i}
+    margin-left unit(i * 8, px)
+  
+  .p-{i}
+    padding unit(i * 8, px)
+  
+  .pt-{i}
+    padding-top unit(i * 8, px)
+  
+  .pr-{i}
+    padding-right unit(i * 8, px)
+  
+  .pb-{i}
+    padding-bottom unit(i * 8, px)
+  
+  .pl-{i}
+    padding-left unit(i * 8, px)
+
+// 显示工具类
+display-values = block inline inline-block flex inline-flex grid inline-grid none
+
+for value in display-values
+  .d-{value}
+    display value
+  
+  +tablet()
+    .d-md-{value}
+      display value
+  
+  +desktop()
+    .d-lg-{value}
+      display value
+
+// 文本对齐
+.text-left
+  text-align left
+
+.text-center
+  text-align center
+
+.text-right
+  text-align right
+
+.text-justify
+  text-align justify
+
+// 条件样式 - 高复杂度
+if enable-animations
+  .fade-in
+    opacity 0
+    transform translateY(20px)
+    transition(opacity 0.6s ease, transform 0.6s ease)
+    
+    &--active
+      opacity 1
+      transform translateY(0)
+  
+  .slide-in
+    transform translateX(-100%)
+    transition(transform 0.5s ease)
+    
+    &--active
+      transform translateX(0)
+  
+  .scale-in
+    transform scale(0)
+    transition(transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55))
+    
+    &--active
+      transform scale(1)
+
+// 深度嵌套示例 - 高复杂度
+.dashboard
+  display grid
+  grid-template-areas "header header" "sidebar main" "footer footer"
+  grid-template-rows auto 1fr auto
+  grid-template-columns 250px 1fr
+  min-height 100vh
+  gap 1rem
+  
+  +mobile()
+    grid-template-areas "header" "main" "sidebar" "footer"
+    grid-template-columns 1fr
+    grid-template-rows auto 1fr auto auto
+  
+  .header
+    grid-area header
+    background primary-color
+    color white
+    padding 1rem
+  
+  .sidebar
+    grid-area sidebar
+    background #f8f9fa
+    padding 1rem
+    
+    +mobile()
+      order 3
+    
+    .nav
+      list-style none
+      
+      &__item
+        margin-bottom 0.5rem
+        
+        &:last-child
+          margin-bottom 0
+      
+      &__link
+        display block
+        padding 0.5rem 1rem
+        text-decoration none
+        color #333
+        border-radius()
+        transition()
+        
+        &:hover
+          background primary-color
+          color white
+        
+        &--active
+          background primary-color
+          color white
+  
+  .main
+    grid-area main
+    padding 2rem
+    
+    .content-grid
+      display grid
+      grid-template-columns repeat(auto-fit, minmax(300px, 1fr))
+      gap 2rem
+      
+      +mobile()
+        grid-template-columns 1fr
+        gap 1rem
+  
+  .footer
+    grid-area footer
+    background #343a40
+    color white
+    padding 1rem
+    text-align center
+

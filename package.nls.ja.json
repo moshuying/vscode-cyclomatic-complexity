@@ -1,0 +1,10 @@
+{
+  "cyclomatic-complexity.updateComplexity.title": "全循環的複雑度を更新",
+  "cyclomatic-complexity.updateFolderComplexity.title": "フォルダ複雑度を再帰的に更新",
+  "cyclomatic-complexity.refresh.title": "ビューを更新",
+  "cyclomatic-complexity.openFile.title": "ファイルを開く",
+  "cyclomatic-complexity.view.title": "コード循環的複雑度",
+  "cyclomatic-complexity.view.name": "複雑度分析",
+  "cyclomatic-complexity.configuration.title": "循環的複雑度設定",
+  "cyclomatic-complexity.configuration.excludeFolders.description": "スキャン時にスキップするフォルダのリスト（*.log のような glob パターンをサポート）"
+}

@@ -1,0 +1,10 @@
+{
+  "cyclomatic-complexity.updateComplexity.title": "Обновить всю циклическую сложность",
+  "cyclomatic-complexity.updateFolderComplexity.title": "Рекурсивно обновить сложность папки",
+  "cyclomatic-complexity.refresh.title": "Обновить представление",
+  "cyclomatic-complexity.openFile.title": "Открыть файл",
+  "cyclomatic-complexity.view.title": "Циклическая сложность кода",
+  "cyclomatic-complexity.view.name": "Анализ сложности",
+  "cyclomatic-complexity.configuration.title": "Конфигурация циклической сложности",
+  "cyclomatic-complexity.configuration.excludeFolders.description": "Список папок для пропуска при сканировании (поддерживает шаблоны glob, такие как *.log)"
+}

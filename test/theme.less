@@ -1,0 +1,668 @@
+// Less样式表示例 - 高复杂度
+// 包含Less特有的混入、变量、函数等特性
+
+// 变量定义
+@primary-color: #007bff;
+@secondary-color: #6c757d;
+@success-color: #28a745;
+@danger-color: #dc3545;
+@warning-color: #ffc107;
+@info-color: #17a2b8;
+@light-color: #f8f9fa;
+@dark-color: #343a40;
+
+@font-family-base: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto;
+@font-size-base: 1rem;
+@line-height-base: 1.5;
+
+@border-radius-sm: 0.2rem;
+@border-radius: 0.25rem;
+@border-radius-lg: 0.3rem;
+
+@spacer: 1rem;
+@grid-gutter-width: 30px;
+
+// 混入定义 - 中等复杂度
+.button-variant(@color; @background; @border: @background) {
+  color: @color;
+  background-color: @background;
+  border-color: @border;
+  
+  &:hover {
+    color: @color;
+    background-color: darken(@background, 7.5%);
+    border-color: darken(@border, 10%);
+  }
+  
+  &:focus,
+  &.focus {
+    color: @color;
+    background-color: darken(@background, 7.5%);
+    border-color: darken(@border, 10%);
+    box-shadow: 0 0 0 0.2rem fade(@border, 50%);
+  }
+  
+  &:active,
+  &.active {
+    color: @color;
+    background-color: darken(@background, 10%);
+    border-color: darken(@border, 12.5%);
+    
+    &:focus {
+      box-shadow: 0 0 0 0.2rem fade(@border, 50%);
+    }
+  }
+  
+  &:disabled,
+  &.disabled {
+    color: @color;
+    background-color: @background;
+    border-color: @border;
+    opacity: 0.65;
+  }
+}
+
+// 响应式混入 - 中等复杂度
+.make-container(@gutter: @grid-gutter-width) {
+  width: 100%;
+  padding-right: (@gutter / 2);
+  padding-left: (@gutter / 2);
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.make-row(@gutter: @grid-gutter-width) {
+  display: flex;
+  flex-wrap: wrap;
+  margin-right: (-@gutter / 2);
+  margin-left: (-@gutter / 2);
+}
+
+.make-col(@size, @columns: 12) {
+  flex: 0 0 percentage(@size / @columns);
+  max-width: percentage(@size / @columns);
+}
+
+// 复杂混入 - 高复杂度
+.gradient-bg(@start-color; @end-color; @direction: to right) {
+  background: @start-color;
+  background: linear-gradient(@direction, @start-color, @end-color);
+  
+  & when (lightness(@start-color) > 50%) {
+    color: @dark-color;
+  }
+  
+  & when (lightness(@start-color) <= 50%) {
+    color: @light-color;
+  }
+}
+
+// 动画混入 - 中等复杂度
+.transition(@transition: all 0.15s ease-in-out) {
+  transition: @transition;
+}
+
+.transform(@transform) {
+  transform: @transform;
+}
+
+.animation(@animation) {
+  animation: @animation;
+}
+
+// 阴影混入 - 中等复杂度
+.box-shadow(@shadow) {
+  box-shadow: @shadow;
+}
+
+.text-shadow(@shadow) {
+  text-shadow: @shadow;
+}
+
+// 按钮组件 - 高复杂度
+.btn {
+  display: inline-block;
+  font-weight: 400;
+  color: @dark-color;
+  text-align: center;
+  vertical-align: middle;
+  user-select: none;
+  background-color: transparent;
+  border: 1px solid transparent;
+  padding: 0.375rem 0.75rem;
+  font-size: @font-size-base;
+  line-height: @line-height-base;
+  border-radius: @border-radius;
+  .transition();
+  
+  &:hover {
+    color: @dark-color;
+    text-decoration: none;
+  }
+  
+  &:focus,
+  &.focus {
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem fade(@primary-color, 25%);
+  }
+  
+  &.disabled,
+  &:disabled {
+    opacity: 0.65;
+    .box-shadow(none);
+  }
+  
+  &:not(:disabled):not(.disabled) {
+    cursor: pointer;
+    
+    &:active,
+    &.active {
+      .box-shadow(inset 0 3px 5px rgba(0, 0, 0, 0.125));
+      
+      &:focus {
+        .box-shadow(inset 0 3px 5px rgba(0, 0, 0, 0.125), 0 0 0 0.2rem fade(@primary-color, 25%));
+      }
+    }
+  }
+  
+  // 按钮变体
+  &-primary {
+    .button-variant(@light-color; @primary-color; @primary-color);
+  }
+  
+  &-secondary {
+    .button-variant(@light-color; @secondary-color; @secondary-color);
+  }
+  
+  &-success {
+    .button-variant(@light-color; @success-color; @success-color);
+  }
+  
+  &-danger {
+    .button-variant(@light-color; @danger-color; @danger-color);
+  }
+  
+  &-warning {
+    .button-variant(@dark-color; @warning-color; @warning-color);
+  }
+  
+  &-info {
+    .button-variant(@light-color; @info-color; @info-color);
+  }
+  
+  &-light {
+    .button-variant(@dark-color; @light-color; @light-color);
+  }
+  
+  &-dark {
+    .button-variant(@light-color; @dark-color; @dark-color);
+  }
+  
+  // 按钮尺寸
+  &-lg {
+    padding: 0.5rem 1rem;
+    font-size: 1.25rem;
+    line-height: 1.5;
+    border-radius: @border-radius-lg;
+  }
+  
+  &-sm {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    border-radius: @border-radius-sm;
+  }
+  
+  // 块级按钮
+  &-block {
+    display: block;
+    width: 100%;
+    
+    + .btn-block {
+      margin-top: 0.5rem;
+    }
+  }
+}
+
+// 卡片组件 - 高复杂度
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  word-wrap: break-word;
+  background-color: #fff;
+  background-clip: border-box;
+  border: 1px solid rgba(0, 0, 0, 0.125);
+  border-radius: @border-radius;
+  
+  > hr {
+    margin-right: 0;
+    margin-left: 0;
+  }
+  
+  > .list-group {
+    border-top: inherit;
+    border-bottom: inherit;
+    
+    &:first-child {
+      border-top-width: 0;
+      border-top-left-radius: calc(@border-radius - 1px);
+      border-top-right-radius: calc(@border-radius - 1px);
+    }
+    
+    &:last-child {
+      border-bottom-width: 0;
+      border-bottom-right-radius: calc(@border-radius - 1px);
+      border-bottom-left-radius: calc(@border-radius - 1px);
+    }
+  }
+  
+  &-body {
+    flex: 1 1 auto;
+    min-height: 1px;
+    padding: 1.25rem;
+  }
+  
+  &-title {
+    margin-bottom: 0.75rem;
+  }
+  
+  &-subtitle {
+    margin-top: -0.375rem;
+    margin-bottom: 0;
+  }
+  
+  &-text:last-child {
+    margin-bottom: 0;
+  }
+  
+  &-link {
+    &:hover {
+      text-decoration: none;
+    }
+    
+    + .card-link {
+      margin-left: 1.25rem;
+    }
+  }
+  
+  &-header {
+    padding: 0.75rem 1.25rem;
+    margin-bottom: 0;
+    background-color: rgba(0, 0, 0, 0.03);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+    
+    &:first-child {
+      border-radius: calc(@border-radius - 1px) calc(@border-radius - 1px) 0 0;
+    }
+    
+    + .list-group .list-group-item:first-child {
+      border-top: 0;
+    }
+  }
+  
+  &-footer {
+    padding: 0.75rem 1.25rem;
+    background-color: rgba(0, 0, 0, 0.03);
+    border-top: 1px solid rgba(0, 0, 0, 0.125);
+    
+    &:last-child {
+      border-radius: 0 0 calc(@border-radius - 1px) calc(@border-radius - 1px);
+    }
+  }
+  
+  &-header-tabs {
+    margin-right: -0.625rem;
+    margin-bottom: -0.75rem;
+    margin-left: -0.625rem;
+    border-bottom: 0;
+  }
+  
+  &-header-pills {
+    margin-right: -0.625rem;
+    margin-left: -0.625rem;
+  }
+  
+  &-img-overlay {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    padding: 1.25rem;
+    border-radius: calc(@border-radius - 1px);
+  }
+  
+  &-img,
+  &-img-top,
+  &-img-bottom {
+    flex-shrink: 0;
+    width: 100%;
+  }
+  
+  &-img,
+  &-img-top {
+    border-top-left-radius: calc(@border-radius - 1px);
+    border-top-right-radius: calc(@border-radius - 1px);
+  }
+  
+  &-img,
+  &-img-bottom {
+    border-bottom-right-radius: calc(@border-radius - 1px);
+    border-bottom-left-radius: calc(@border-radius - 1px);
+  }
+  
+  &-deck {
+    .card {
+      margin-bottom: @spacer;
+    }
+    
+    @media (min-width: 576px) {
+      display: flex;
+      flex-flow: row wrap;
+      margin-right: -@spacer;
+      margin-left: -@spacer;
+      
+      .card {
+        flex: 1 0 0%;
+        margin-right: @spacer;
+        margin-bottom: 0;
+        margin-left: @spacer;
+      }
+    }
+  }
+  
+  &-group {
+    > .card {
+      margin-bottom: (@spacer / 2);
+    }
+    
+    @media (min-width: 576px) {
+      display: flex;
+      flex-flow: column;
+      
+      > .card {
+        flex: 1 0 auto;
+        margin-bottom: 0;
+        
+        + .card {
+          margin-left: 0;
+          border-top: 0;
+        }
+        
+        &:not(:last-child) {
+          border-bottom-right-radius: 0;
+          border-bottom-left-radius: 0;
+        }
+        
+        &:not(:first-child) {
+          border-top-left-radius: 0;
+          border-top-right-radius: 0;
+        }
+      }
+    }
+  }
+  
+  &-columns {
+    .card {
+      margin-bottom: 0.75rem;
+    }
+    
+    @media (min-width: 576px) {
+      column-count: 3;
+      column-gap: 1.25rem;
+      orphans: 1;
+      widows: 1;
+      
+      .card {
+        display: inline-block;
+        width: 100%;
+      }
+    }
+  }
+}
+
+// 表格组件 - 高复杂度
+.table {
+  width: 100%;
+  margin-bottom: @spacer;
+  color: @dark-color;
+  
+  th,
+  td {
+    padding: 0.75rem;
+    vertical-align: top;
+    border-top: 1px solid #dee2e6;
+  }
+  
+  thead th {
+    vertical-align: bottom;
+    border-bottom: 2px solid #dee2e6;
+  }
+  
+  tbody + tbody {
+    border-top: 2px solid #dee2e6;
+  }
+  
+  &-sm {
+    th,
+    td {
+      padding: 0.3rem;
+    }
+  }
+  
+  &-bordered {
+    border: 1px solid #dee2e6;
+    
+    th,
+    td {
+      border: 1px solid #dee2e6;
+    }
+    
+    thead {
+      th,
+      td {
+        border-bottom-width: 2px;
+      }
+    }
+  }
+  
+  &-borderless {
+    th,
+    td,
+    thead th,
+    tbody + tbody {
+      border: 0;
+    }
+  }
+  
+  &-striped {
+    tbody tr:nth-of-type(odd) {
+      background-color: rgba(0, 0, 0, 0.05);
+    }
+  }
+  
+  &-hover {
+    tbody tr:hover {
+      color: @dark-color;
+      background-color: rgba(0, 0, 0, 0.075);
+    }
+  }
+  
+  // 表格变体
+  each(@colors, {
+    @selector: e('.table-@{key}');
+    @{selector} {
+      th,
+      td,
+      thead th,
+      tbody + tbody {
+        border-color: @value;
+      }
+    }
+    
+    @hover-selector: e('.table-hover .table-@{key}:hover');
+    @{hover-selector} {
+      > td,
+      > th {
+        background-color: darken(@value, 5%);
+      }
+    }
+  });
+  
+  &-active {
+    th,
+    td {
+      background-color: rgba(0, 0, 0, 0.075);
+    }
+  }
+  
+  &-dark {
+    color: @light-color;
+    background-color: @dark-color;
+    
+    th,
+    td,
+    thead th {
+      border-color: lighten(@dark-color, 7.5%);
+    }
+    
+    &.table-bordered {
+      border: 0;
+    }
+    
+    &.table-striped {
+      tbody tr:nth-of-type(odd) {
+        background-color: rgba(255, 255, 255, 0.05);
+      }
+    }
+    
+    &.table-hover {
+      tbody tr:hover {
+        color: @light-color;
+        background-color: rgba(255, 255, 255, 0.075);
+      }
+    }
+  }
+}
+
+// 定义颜色映射
+@colors: {
+  primary: @primary-color;
+  secondary: @secondary-color;
+  success: @success-color;
+  danger: @danger-color;
+  warning: @warning-color;
+  info: @info-color;
+  light: @light-color;
+  dark: @dark-color;
+};
+
+// 条件逻辑 - 中等复杂度
+& when (@enable-rounded = true) {
+  .rounded {
+    border-radius: @border-radius !important;
+  }
+  
+  .rounded-top {
+    border-top-left-radius: @border-radius !important;
+    border-top-right-radius: @border-radius !important;
+  }
+  
+  .rounded-right {
+    border-top-right-radius: @border-radius !important;
+    border-bottom-right-radius: @border-radius !important;
+  }
+  
+  .rounded-bottom {
+    border-bottom-right-radius: @border-radius !important;
+    border-bottom-left-radius: @border-radius !important;
+  }
+  
+  .rounded-left {
+    border-top-left-radius: @border-radius !important;
+    border-bottom-left-radius: @border-radius !important;
+  }
+  
+  .rounded-lg {
+    border-radius: @border-radius-lg !important;
+  }
+  
+  .rounded-sm {
+    border-radius: @border-radius-sm !important;
+  }
+  
+  .rounded-0 {
+    border-radius: 0 !important;
+  }
+  
+  .rounded-circle {
+    border-radius: 50% !important;
+  }
+  
+  .rounded-pill {
+    border-radius: 50rem !important;
+  }
+}
+
+// 工具类生成 - 高复杂度
+each(@colors, {
+  @selector: e('.text-@{key}');
+  @{selector} {
+    color: @value !important;
+  }
+  
+  @link-selector: e('a@{selector}:hover, a@{selector}:focus');
+  @{link-selector} {
+    color: darken(@value, 15%) !important;
+  }
+  
+  @bg-selector: e('.bg-@{key}');
+  @{bg-selector} {
+    background-color: @value !important;
+  }
+  
+  @bg-link-selector: e('a@{bg-selector}:hover, a@{bg-selector}:focus, button@{bg-selector}:hover, button@{bg-selector}:focus');
+  @{bg-link-selector} {
+    background-color: darken(@value, 7.5%) !important;
+  }
+});
+
+// 响应式工具类
+@media (min-width: 576px) {
+  .d-sm-none { display: none !important; }
+  .d-sm-inline { display: inline !important; }
+  .d-sm-inline-block { display: inline-block !important; }
+  .d-sm-block { display: block !important; }
+  .d-sm-table { display: table !important; }
+  .d-sm-table-row { display: table-row !important; }
+  .d-sm-table-cell { display: table-cell !important; }
+  .d-sm-flex { display: flex !important; }
+  .d-sm-inline-flex { display: inline-flex !important; }
+}
+
+@media (min-width: 768px) {
+  .d-md-none { display: none !important; }
+  .d-md-inline { display: inline !important; }
+  .d-md-inline-block { display: inline-block !important; }
+  .d-md-block { display: block !important; }
+  .d-md-table { display: table !important; }
+  .d-md-table-row { display: table-row !important; }
+  .d-md-table-cell { display: table-cell !important; }
+  .d-md-flex { display: flex !important; }
+  .d-md-inline-flex { display: inline-flex !important; }
+}
+
+@media (min-width: 992px) {
+  .d-lg-none { display: none !important; }
+  .d-lg-inline { display: inline !important; }
+  .d-lg-inline-block { display: inline-block !important; }
+  .d-lg-block { display: block !important; }
+  .d-lg-table { display: table !important; }
+  .d-lg-table-row { display: table-row !important; }
+  .d-lg-table-cell { display: table-cell !important; }
+  .d-lg-flex { display: flex !important; }
+  .d-lg-inline-flex { display: inline-flex !important; }
+}
+

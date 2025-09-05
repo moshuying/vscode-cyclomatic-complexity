@@ -1,0 +1,178 @@
+{
+  "name": "vscode-cyclomatic-complexity",
+  "displayName": "Code Cyclomatic Complexity",
+  "description": "显示代码文件的圈复杂度，支持JavaScript、TypeScript、Vue、HTML、CSS等多种文件类型",
+  "version": "0.0.6",
+  "publisher": "moshuying",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/moshuying/vscode-cyclomatic-complexity.git"
+  },
+  "bugs": {
+    "url": "https://github.com/moshuying/vscode-cyclomatic-complexity.git"
+  },
+  "homepage": "https://github.com/moshuying/vscode-cyclomatic-complexity.git",
+  "engines": {
+    "vscode": "^1.74.0",
+    "node": ">=20.11.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "icon": "images/icon.png",
+  "keywords": [
+    "react",
+    "vue",
+    "html",
+    "css",
+    "javascript",
+    "typescript",
+    "complexity",
+    "cyclomatic",
+    "code quality",
+    "analysis"
+  ],
+  "license": "MIT",
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "cyclomatic-complexity.updateComplexity",
+        "title": "%cyclomatic-complexity.updateComplexity.title%",
+        "category": "圈复杂度分析",
+        "icon": "$(sync)"
+      },
+      {
+        "command": "cyclomatic-complexity.updateFolderComplexity",
+        "title": "%cyclomatic-complexity.updateFolderComplexity.title%",
+        "category": "圈复杂度分析",
+        "icon": "$(folder-opened)"
+      },
+      {
+        "command": "cyclomatic-complexity.refresh",
+        "title": "%cyclomatic-complexity.refresh.title%",
+        "category": "圈复杂度分析",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "cyclomatic-complexity.openFile",
+        "title": "%cyclomatic-complexity.openFile.title%",
+        "category": "圈复杂度分析",
+        "icon": "$(go-to-file)"
+      }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "react-complexity",
+          "title": "%cyclomatic-complexity.view.title%",
+          "icon": "$(graph)"
+        }
+      ]
+    },
+    "views": {
+      "react-complexity": [
+        {
+          "id": "complexityTree",
+          "name": "%cyclomatic-complexity.view.name%",
+          "type": "tree"
+        }
+      ]
+    },
+    "menus": {
+      "view/title": [
+        {
+          "command": "cyclomatic-complexity.updateComplexity",
+          "when": "view == complexityTree",
+          "group": "navigation@1"
+        },
+        {
+          "command": "cyclomatic-complexity.refresh",
+          "when": "view == complexityTree",
+          "group": "navigation@2"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "cyclomatic-complexity.openFile",
+          "when": "view == complexityTree && viewItem == file",
+          "group": "inline@1"
+        },
+        {
+          "command": "cyclomatic-complexity.updateFolderComplexity",
+          "when": "view == complexityTree && viewItem == folder",
+          "group": "inline@1"
+        }
+      ],
+      "explorer/context": [
+        {
+          "command": "cyclomatic-complexity.updateFolderComplexity",
+          "group": "navigation"
+        }
+      ]
+    },
+    "configuration": {
+      "type": "object",
+      "title": "%cyclomatic-complexity.configuration.title%",
+      "properties": {
+        "codeComplexity.excludeFolders": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [
+            "node_modules",
+            "dist",
+            "build",
+            "out",
+            "coverage",
+            ".git",
+            ".vscode",
+            ".idea",
+            ".nyc_output",
+            "vendor",
+            "bower_components",
+            "target",
+            "bin",
+            "obj",
+            "Debug",
+            "Release",
+            ".next",
+            ".nuxt",
+            ".cache",
+            ".tmp",
+            "tmp",
+            "temp",
+            "logs",
+            "*.log"
+          ],
+          "description": "%cyclomatic-complexity.configuration.excludeFolders.description%",
+          "scope": "resource"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "build-cli": "tsc -p ./cli && node out/cli/index.js",
+    "package": "npm run compile && vsce package",
+    "package:install": "npm run package && code --install-extension *.vsix",
+    "publish": "npm run compile && vsce publish"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.74.0",
+    "@types/node": "16.x",
+    "@types/minimatch": "^3.0.5",
+    "typescript": "^4.9.4",
+    "@vscode/vsce": "^2.22.0"
+  },
+  "dependencies": {
+    "typescript": "^4.9.4",
+    "minimatch": "^3.1.2"
+  }
+}
