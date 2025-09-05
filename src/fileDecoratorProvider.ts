@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { ComplexityAnalyzer } from './complexityAnalyzer';
-
+import { t } from './common';
 export class FileDecoratorProvider implements vscode.FileDecorationProvider {
   private _onDidChangeFileDecorations: vscode.EventEmitter<vscode.Uri | vscode.Uri[] | undefined> = new vscode.EventEmitter<vscode.Uri | vscode.Uri[] | undefined>();
   readonly onDidChangeFileDecorations: vscode.Event<vscode.Uri | vscode.Uri[] | undefined> = this._onDidChangeFileDecorations.event;
@@ -17,17 +17,17 @@ export class FileDecoratorProvider implements vscode.FileDecorationProvider {
 
     let color: vscode.ThemeColor;
     let tooltip: string;
-    const typeText = result.type === 'folder' ? '文件夹' : '文件';
+    const typeText = result.type === 'folder' ? t("decorator.folder") : t("decorator.file");
 
     if (result.complexity <= 5) {
       color = new vscode.ThemeColor('charts.green');
-      tooltip = `${typeText}圈复杂度: ${result.complexity} (低)`;
+      tooltip = `${typeText}${t("decorator.complexity", result.complexity.toString())} (${t("decorator.level.low")})`;
     } else if (result.complexity <= 10) {
       color = new vscode.ThemeColor('charts.yellow');
-      tooltip = `${typeText}圈复杂度: ${result.complexity} (中)`;
+      tooltip = `${typeText}${t("decorator.complexity", result.complexity.toString())} (${t("decorator.level.medium")})`;
     } else {
       color = new vscode.ThemeColor('charts.red');
-      tooltip = `${typeText}圈复杂度: ${result.complexity} (高)`;
+      tooltip = `${typeText}${t("decorator.complexity", result.complexity.toString())} (${t("decorator.level.high")})`;
     }
 
     return {

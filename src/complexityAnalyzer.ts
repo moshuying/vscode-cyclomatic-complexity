@@ -48,16 +48,19 @@ export class ComplexityAnalyzer {
 
     // 从VSCode配置中获取排除文件夹列表（支持新旧配置名称）
     let config = vscode.workspace.getConfiguration('codeComplexity');
-    let excludeFolders = config.get<string[]>('excludeFolders');
+    let excludeFolders = config.get<string[]>('excludeFolders') || [];
+
+    // 排除文件夹必定包含node_modules
+    excludeFolders = excludeFolders?.concat(['node_modules']);
 
     // 如果新配置不存在，回退到旧配置
     if (!excludeFolders || excludeFolders.length === 0) {
       config = vscode.workspace.getConfiguration('reactComplexity');
-      excludeFolders = config.get<string[]>('excludeFolders');
+      excludeFolders = config.get<string[]>('excludeFolders') || [];
     }
 
     // 如果都没有，使用默认值
-    if (!excludeFolders) {
+    if (!excludeFolders || excludeFolders.length === 0) {
       excludeFolders = [
         'node_modules',
         'dist',

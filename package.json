@@ -43,25 +43,25 @@
       {
         "command": "cyclomatic-complexity.updateComplexity",
         "title": "%cyclomatic-complexity.updateComplexity.title%",
-        "category": "圈复杂度分析",
+        "category": "%cyclomatic-complexity.category%",
         "icon": "$(sync)"
       },
       {
         "command": "cyclomatic-complexity.updateFolderComplexity",
         "title": "%cyclomatic-complexity.updateFolderComplexity.title%",
-        "category": "圈复杂度分析",
+        "category": "%cyclomatic-complexity.category%",
         "icon": "$(folder-opened)"
       },
       {
         "command": "cyclomatic-complexity.refresh",
         "title": "%cyclomatic-complexity.refresh.title%",
-        "category": "圈复杂度分析",
+        "category": "%cyclomatic-complexity.category%",
         "icon": "$(refresh)"
       },
       {
         "command": "cyclomatic-complexity.openFile",
         "title": "%cyclomatic-complexity.openFile.title%",
-        "category": "圈复杂度分析",
+        "category": "%cyclomatic-complexity.category%",
         "icon": "$(go-to-file)"
       }
     ],
@@ -175,5 +175,8 @@
   "dependencies": {
     "typescript": "^4.9.4",
     "minimatch": "^3.1.2"
+  },
+  "nls": {
+    "path": "./package.nls.{0}.json"
   }
 }

@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { ComplexityAnalyzer, ComplexityResult } from './complexityAnalyzer';
-
+import { t } from './common';
 export class FileTreeProvider implements vscode.TreeDataProvider<ComplexityTreeItem> {
   private _onDidChangeTreeData: vscode.EventEmitter<ComplexityTreeItem | undefined | null | void> = new vscode.EventEmitter<ComplexityTreeItem | undefined | null | void>();
   readonly onDidChangeTreeData: vscode.Event<ComplexityTreeItem | undefined | null | void> = this._onDidChangeTreeData.event;
@@ -41,7 +41,7 @@ export class FileTreeProvider implements vscode.TreeDataProvider<ComplexityTreeI
         // 没有工作区时显示提示
         return [new ComplexityTreeItem({
           path: '',
-          name: '请先打开一个工作区',
+          name: t("tree.noWorkspace"),
           complexity: 0,
           type: 'info',
           children: []
@@ -61,7 +61,7 @@ export class FileTreeProvider implements vscode.TreeDataProvider<ComplexityTreeI
           const children: ComplexityResult[] = [];
 
           if (this._isAnalyzing) {
-            const progressText = this._progressInfo || '⏳ 正在分析中...';
+            const progressText = this._progressInfo || t("progress.analyzingInProgress");
             children.push({
               path: '',
               name: progressText,
@@ -71,20 +71,20 @@ export class FileTreeProvider implements vscode.TreeDataProvider<ComplexityTreeI
           } else if (this._analysisError) {
             children.push({
               path: '',
-              name: `❌ 分析失败: ${this._analysisError}`,
+              name: t("tree.analysisFailed", this._analysisError),
               complexity: 0,
               type: 'info'
             });
           } else {
             children.push({
               path: '',
-              name: '📝 暂无React文件分析数据',
+              name: t("tree.noData"),
               complexity: 0,
               type: 'info'
             });
             children.push({
               path: '',
-              name: '💡 点击上方的同步按钮开始分析',
+              name: t("tree.clickToAnalyze"),
               complexity: 0,
               type: 'info'
             });
@@ -145,7 +145,7 @@ export class ComplexityTreeItem extends vscode.TreeItem {
     } else {
       // 文件或文件夹项
       this.description = result.complexity > 0 ? `${result.complexity}` : '';
-      this.tooltip = `${result.name}\n路径: ${result.path}\n圈复杂度: ${result.complexity}`;
+      this.tooltip = `${result.name}\n路径: ${result.path}\n${t("decorator.complexity", result.complexity.toString())}`;
 
       // 根据复杂度设置不同的图标和颜色
       if (result.type === 'folder') {
@@ -162,7 +162,7 @@ export class ComplexityTreeItem extends vscode.TreeItem {
       if (result.type === 'file') {
         this.command = {
           command: 'vscode.open',
-          title: '打开文件',
+          title: t("tree.openFile"),
           arguments: [vscode.Uri.file(result.path)]
         };
       }

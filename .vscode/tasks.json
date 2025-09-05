@@ -1,0 +1,97 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "type": "npm",
+            "script": "compile",
+            "group": "build",
+            "presentation": {
+                "panel": "shared",
+                "reveal": "silent",
+                "clear": false
+            },
+            "problemMatcher": "$tsc"
+        },
+        {
+            "type": "npm",
+            "script": "watch",
+            "group": "build",
+            "presentation": {
+                "panel": "shared",
+                "reveal": "always",
+                "clear": false
+            },
+            "isBackground": true,
+            "problemMatcher": {
+                "owner": "typescript",
+                "source": "ts",
+                "applyTo": "closedDocuments",
+                "fileLocation": [
+                    "relative",
+                    "${workspaceFolder}"
+                ],
+                "pattern": "$tsc-watch",
+                "background": {
+                    "activeOnStart": true,
+                    "beginsPattern": {
+                        "regexp": "(.*?)Starting compilation in watch mode\\.\\.\\."
+                    },
+                    "endsPattern": {
+                        "regexp": "(.*?)Found \\d+ errors?\\. Watching for file changes\\."
+                    }
+                }
+            }
+        },
+        {
+            "type": "npm",
+            "script": "package",
+            "group": "build",
+            "presentation": {
+                "panel": "shared",
+                "reveal": "always",
+                "clear": true
+            },
+            "problemMatcher": []
+        },
+        {
+            "type": "npm",
+            "script": "package:install",
+            "group": "build",
+            "presentation": {
+                "panel": "shared",
+                "reveal": "always",
+                "clear": true
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "清理输出目录",
+            "type": "shell",
+            "command": "rm",
+            "args": [
+                "-rf",
+                "out"
+            ],
+            "group": "build",
+            "presentation": {
+                "panel": "shared",
+                "reveal": "silent",
+                "clear": false
+            }
+        },
+        {
+            "label": "重新构建",
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "清理输出目录",
+                "npm: compile"
+            ],
+            "group": "build",
+            "presentation": {
+                "panel": "shared",
+                "reveal": "always",
+                "clear": true
+            }
+        }
+    ]
+}

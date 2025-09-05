@@ -4,10 +4,9 @@ import * as fs from 'fs';
 import { ComplexityAnalyzer } from './complexityAnalyzer';
 import { ComplexityTreeItem, FileTreeProvider } from './fileTreeProvider';
 import { FileDecoratorProvider } from './fileDecoratorProvider';
-
+import { t } from './common';
 
 export function activate(context: vscode.ExtensionContext) {
-  console.log('圈复杂度分析插件已激活');
 
   const complexityAnalyzer = new ComplexityAnalyzer();
   const fileTreeProvider = new FileTreeProvider(complexityAnalyzer);
@@ -15,7 +14,7 @@ export function activate(context: vscode.ExtensionContext) {
 
   // 创建状态栏项目
   const statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 100);
-  statusBarItem.text = "$(sync~spin) 分析圈复杂度中...";
+  statusBarItem.text = `$(sync~spin) ${t("status.analyzing")}`;
 
   // 注册文件装饰器提供者
   const fileDecorationProvider = vscode.window.registerFileDecorationProvider(fileDecoratorProvider);
@@ -45,11 +44,11 @@ export function activate(context: vscode.ExtensionContext) {
         await complexityAnalyzer.analyzeFolder(folder.uri.fsPath, (message, currentFile, totalFiles, currentFolder) => {
           const progressText = totalFiles > 0 ? `(${currentFile}/${totalFiles})` : '';
           const folderText = currentFolder ? ` [${currentFolder}]` : '';
-          statusBarItem.text = `$(sync~spin) 分析圈复杂度中 ${progressText}${folderText}`;
-          statusBarItem.tooltip = `已分析 ${currentFile}/${totalFiles} 个文件${folderText}`;
+          statusBarItem.text = `$(sync~spin) ${t("status.analyzingWithProgress", progressText + folderText)}`;
+          statusBarItem.tooltip = t("tooltip.analyzing", currentFile.toString(), totalFiles.toString(), folderText);
 
           // 更新树视图进度显示 - 显示和状态栏tooltip一样的信息
-          fileTreeProvider.updateProgress(`⏳ 已分析 ${currentFile}/${totalFiles} 个文件${folderText}`);
+          fileTreeProvider.updateProgress(t("progress.analyzing", currentFile.toString(), totalFiles.toString(), folderText));
 
           // 实时更新装饰器
           fileDecoratorProvider.refresh();
@@ -60,8 +59,8 @@ export function activate(context: vscode.ExtensionContext) {
       fileTreeProvider.setAnalyzingState(false);
       fileTreeProvider.refresh();
       fileDecoratorProvider.refresh();
-      statusBarItem.text = "$(check) 圈复杂度分析完成";
-      statusBarItem.tooltip = "代码圈复杂度分析已完成";
+      statusBarItem.text = `$(check) ${t("status.completed")}`;
+      statusBarItem.tooltip = t("tooltip.completed");
 
       console.log('Initial analysis completed, WebView should refresh automatically');
 
@@ -73,9 +72,9 @@ export function activate(context: vscode.ExtensionContext) {
     } catch (error) {
       // 分析失败，设置错误状态
       fileTreeProvider.setAnalyzingState(false, String(error));
-      statusBarItem.text = "$(error) 分析失败";
-      statusBarItem.tooltip = `圈复杂度分析失败: ${error}`;
-      vscode.window.showErrorMessage(`圈复杂度分析失败: ${error}`);
+      statusBarItem.text = `$(error) ${t("status.failed")}`;
+      statusBarItem.tooltip = t("tooltip.failed", String(error));
+      vscode.window.showErrorMessage(t("error.analysisFailed", String(error)));
     }
   };
 
@@ -89,25 +88,25 @@ export function activate(context: vscode.ExtensionContext) {
       try {
         const p = uri instanceof ComplexityTreeItem ? uri.result?.path : uri.fsPath;
         if (!fs.existsSync(p)) {
-          vscode.window.showErrorMessage('文件夹不存在');
+          vscode.window.showErrorMessage(t("error.folderNotExists"));
           return;
         }
         const folderPath = p
 
         // 设置分析状态
         fileTreeProvider.setAnalyzingState(true);
-        statusBarItem.text = `$(sync~spin) 分析文件夹: ${path.basename(folderPath)}`;
+        statusBarItem.text = `$(sync~spin) ${t("status.analyzingFolder", path.basename(folderPath))}`;
         statusBarItem.show();
 
         // 递归分析文件夹（忽略.gitignore）
         await complexityAnalyzer.analyzeFolder(folderPath, (message, currentFile, totalFiles, currentFolder) => {
           const progressText = totalFiles > 0 ? `(${currentFile}/${totalFiles})` : '';
           const folderText = currentFolder ? ` [${currentFolder}]` : '';
-          statusBarItem.text = `$(sync~spin) 分析圈复杂度中 ${progressText}${folderText}`;
-          statusBarItem.tooltip = `已分析 ${currentFile}/${totalFiles} 个文件${folderText}`;
+          statusBarItem.text = `$(sync~spin) ${t("status.analyzingWithProgress", progressText + folderText)}`;
+          statusBarItem.tooltip = t("tooltip.analyzing", currentFile.toString(), totalFiles.toString(), folderText);
 
           // 更新树视图进度显示 - 显示和状态栏tooltip一样的信息
-          fileTreeProvider.updateProgress(`⏳ 已分析 ${currentFile}/${totalFiles} 个文件${folderText}`);
+          fileTreeProvider.updateProgress(t("progress.analyzing", currentFile.toString(), totalFiles.toString(), folderText));
 
           // 实时更新装饰器
           fileDecoratorProvider.refresh();
@@ -117,8 +116,8 @@ export function activate(context: vscode.ExtensionContext) {
         fileTreeProvider.setAnalyzingState(false);
         fileTreeProvider.refresh();
         fileDecoratorProvider.refresh();
-        statusBarItem.text = "$(check) 文件夹分析完成";
-        statusBarItem.tooltip = `已递归更新文件夹 ${path.basename(folderPath)} 的圈复杂度`;
+        statusBarItem.text = `$(check) ${t("status.folderCompleted")}`;
+        statusBarItem.tooltip = t("tooltip.folderCompleted", path.basename(folderPath));
 
         console.log('Folder analysis completed, WebView should refresh automatically');
 
@@ -130,9 +129,9 @@ export function activate(context: vscode.ExtensionContext) {
       } catch (error) {
         // 分析失败，设置错误状态
         fileTreeProvider.setAnalyzingState(false, String(error));
-        statusBarItem.text = "$(error) 分析失败";
-        statusBarItem.tooltip = `更新圈复杂度失败: ${error}`;
-        vscode.window.showErrorMessage(`更新圈复杂度失败: ${error}`);
+        statusBarItem.text = `$(error) ${t("status.failed")}`;
+        statusBarItem.tooltip = t("tooltip.updateFailed", String(error));
+        vscode.window.showErrorMessage(t("error.updateFailed", String(error)));
       }
     }
   );
@@ -144,13 +143,13 @@ export function activate(context: vscode.ExtensionContext) {
       try {
         const workspaceFolders = vscode.workspace.workspaceFolders;
         if (!workspaceFolders) {
-          vscode.window.showErrorMessage('请先打开一个工作区');
+          vscode.window.showErrorMessage(t("error.noWorkspace"));
           return;
         }
 
         // 设置分析状态
         fileTreeProvider.setAnalyzingState(true);
-        statusBarItem.text = "$(sync~spin) 全量更新圈复杂度中...";
+        statusBarItem.text = `$(sync~spin) ${t("status.analyzingFullUpdate")}`;
         statusBarItem.show();
 
         // 清除缓存，重新分析
@@ -160,11 +159,11 @@ export function activate(context: vscode.ExtensionContext) {
           await complexityAnalyzer.analyzeFolder(folder.uri.fsPath, (message, currentFile, totalFiles, currentFolder) => {
             const progressText = totalFiles > 0 ? `(${currentFile}/${totalFiles})` : '';
             const folderText = currentFolder ? ` [${currentFolder}]` : '';
-            statusBarItem.text = `$(sync~spin) 分析圈复杂度中 ${progressText}${folderText}`;
-            statusBarItem.tooltip = `已分析 ${currentFile}/${totalFiles} 个文件${folderText}`;
+            statusBarItem.text = `$(sync~spin) ${t("status.analyzingWithProgress", progressText + folderText)}`;
+            statusBarItem.tooltip = vscode.l10n.t("cyclomatic-complexity.tooltip.analyzing", currentFile.toString(), totalFiles.toString(), folderText);
 
             // 更新树视图进度显示 - 显示和状态栏tooltip一样的信息
-            fileTreeProvider.updateProgress(`⏳ 已分析 ${currentFile}/${totalFiles} 个文件${folderText}`);
+            fileTreeProvider.updateProgress(t("progress.analyzing", currentFile.toString(), totalFiles.toString(), folderText));
 
             // 实时更新装饰器
             fileDecoratorProvider.refresh();
@@ -175,8 +174,8 @@ export function activate(context: vscode.ExtensionContext) {
         fileTreeProvider.setAnalyzingState(false);
         fileTreeProvider.refresh();
         fileDecoratorProvider.refresh();
-        statusBarItem.text = "$(check) 全量更新完成";
-        statusBarItem.tooltip = "已全量更新所有支持文件的圈复杂度";
+        statusBarItem.text = `$(check) ${t("status.fullUpdateCompleted")}`;
+        statusBarItem.tooltip = t("tooltip.fullUpdateCompleted");
 
         console.log('Full analysis completed, WebView should refresh automatically');
 
@@ -188,9 +187,9 @@ export function activate(context: vscode.ExtensionContext) {
       } catch (error) {
         // 分析失败，设置错误状态
         fileTreeProvider.setAnalyzingState(false, String(error));
-        statusBarItem.text = "$(error) 更新失败";
-        statusBarItem.tooltip = `更新圈复杂度失败: ${error}`;
-        vscode.window.showErrorMessage(`更新圈复杂度失败: ${error}`);
+        statusBarItem.text = `$(error) ${t("status.updateFailed")}`;
+        statusBarItem.tooltip = t("tooltip.updateFailed", String(error));
+        vscode.window.showErrorMessage(t("error.updateFailed", String(error)));
       }
     }
   );
@@ -201,7 +200,7 @@ export function activate(context: vscode.ExtensionContext) {
     () => {
       fileTreeProvider.refresh();
       fileDecoratorProvider.refresh();
-      vscode.window.showInformationMessage('圈复杂度视图已刷新');
+      vscode.window.showInformationMessage(t("message.viewRefreshed"));
     }
   );
 
@@ -215,7 +214,7 @@ export function activate(context: vscode.ExtensionContext) {
           const document = await vscode.workspace.openTextDocument(fileUri);
           await vscode.window.showTextDocument(document);
         } catch (error) {
-          vscode.window.showErrorMessage(`无法打开文件: ${error}`);
+          vscode.window.showErrorMessage(t("error.cannotOpenFile", String(error)));
         }
       }
     }
