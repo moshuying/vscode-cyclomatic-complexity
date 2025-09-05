@@ -1,0 +1,30 @@
+---
+description: Git 版本控制规范 - 使用规范的提交信息和表情符号创建格式良好的提交
+globs: ["**/*"]
+alwaysApply: true
+---
+按照angular规范提交commit
+
+<type>(<scope>): <subject>
+
+type: 提交类型
+scope: 提交范围
+subject: 提交主题
+
+每次commit必须包含这三项
+
+
+## 示例：
+
+feat(feature-name): Add feature
+fix(bug-name): Fix bug
+docs(README): Update README
+refactor(component-name): Refactor component
+style(component-name): Style component
+perf(component-name): Performance component
+test(component-name): Test component
+chore(package.json): Update package.json
+wip(component-name): Work in progress
+remove(component-name): Remove component
+hotfix(component-name): Hotfix component
+security(component-name): Security component

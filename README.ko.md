@@ -2,7 +2,8 @@
 
 리소스 탐색기에서 프론트엔드 코드 파일의 순환 복잡도를 직관적으로 표시하는 VSCode 플러그인입니다. JavaScript, TypeScript, Vue, HTML, CSS 등 다양한 파일 형식을 지원합니다.
 
-![vscode-react-complexity](screenshot/PixPin_2025-09-03_21-32-55.png)
+![vscode-react-complexity](https://raw.githubusercontent.com/moshuying/vscode-cyclomatic-complexity/main/screenshot/PixPin_2025-09-03_21-32-55.png)
+
 
 ## ✨ 주요 기능
 

@@ -2,7 +2,8 @@
 
 Плагин VSCode для наглядного отображения циклической сложности файлов фронтенд-кода в проводнике ресурсов. Поддерживает JavaScript, TypeScript, Vue, HTML, CSS и многие другие типы файлов.
 
-![vscode-react-complexity](screenshot/PixPin_2025-09-03_21-32-55.png)
+![vscode-react-complexity](https://raw.githubusercontent.com/moshuying/vscode-cyclomatic-complexity/main/screenshot/PixPin_2025-09-03_21-32-55.png)
+
 
 ## ✨ Основные функции
 
