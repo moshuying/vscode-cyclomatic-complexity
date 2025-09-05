@@ -1,0 +1,1 @@
+export { VueHandler } from './VueHandler';

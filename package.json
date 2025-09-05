@@ -3,6 +3,7 @@
   "displayName": "Code Cyclomatic Complexity",
   "description": "显示代码文件的圈复杂度，支持JavaScript、TypeScript、Vue、HTML、CSS等多种文件类型",
   "version": "0.0.6",
+  "author": "moshuying",
   "publisher": "moshuying",
   "repository": {
     "type": "git",
@@ -11,7 +12,7 @@
   "bugs": {
     "url": "https://github.com/moshuying/vscode-cyclomatic-complexity.git"
   },
-  "homepage": "https://github.com/moshuying/vscode-cyclomatic-complexity.git",
+  "homepage": "https://www.msy.plus",
   "engines": {
     "vscode": "^1.74.0",
     "node": ">=20.11.0"
