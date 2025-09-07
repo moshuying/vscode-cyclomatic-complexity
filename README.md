@@ -53,3 +53,4 @@ npm run watch                     # Watch for changes and compile
 
 MIT
 
+![qr-code](https://raw.githubusercontent.com/moshuying/vscode-cyclomatic-complexity/main/扫码_搜索联合传播样式-标准色版.png)
